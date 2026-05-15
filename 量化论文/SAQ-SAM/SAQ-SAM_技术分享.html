@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAQ-SAM 技术分享</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            color: #a0aec0;
+        }
+
+        .header .meta {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #718096;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid;
+        }
+
+        .section.motivation {
+            border-left-color: #e74c3c;
+        }
+
+        .section.insight {
+            border-left-color: #f39c12;
+        }
+
+        .section.solution {
+            border-left-color: #27ae60;
+        }
+
+        .section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section.motivation h2 {
+            color: #c0392b;
+        }
+
+        .section.insight h2 {
+            color: #d68910;
+        }
+
+        .section.solution h2 {
+            color: #1e8449;
+        }
+
+        .icon {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 50%;
+            font-size: 1.2em;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .problem-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .problem-box h4 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .problem-box ul {
+            margin-left: 20px;
+            color: #555;
+        }
+
+        .problem-box li {
+            margin-bottom: 8px;
+        }
+
+        .insight-card {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .insight-card .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .insight-card .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .insight-card .card h4 {
+            color: #f39c12;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        .insight-card .card p {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .solution-item {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .solution-item h3 {
+            color: #27ae60;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .solution-item .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #e8f8f0;
+            color: #27ae60;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .formula {
+            background: #2d3436;
+            color: #dfe6e9;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-family: "Courier New", monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison .before, .comparison .after {
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .comparison .before {
+            background: #ffe6e6;
+            border: 2px solid #ffcccc;
+        }
+
+        .comparison .after {
+            background: #e6ffe6;
+            border: 2px solid #ccffcc;
+        }
+
+        .comparison h4 {
+            margin-bottom: 10px;
+        }
+
+        .comparison .before h4 {
+            color: #c0392b;
+        }
+
+        .comparison .after h4 {
+            color: #27ae60;
+        }
+
+        .key-takeaway {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .key-takeaway h3 {
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .key-takeaway ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .key-takeaway li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .key-takeaway li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #00d2ff;
+        }
+
+        .footer {
+            background: #1a1a2e;
+            color: #718096;
+            text-align: center;
+            padding: 30px;
+            font-size: 0.9em;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .insight-card {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔬 SAQ-SAM</h1>
+            <p class="subtitle">语义对齐量化 for Segment Anything Model</p>
+            <p class="meta">AAAI 2026 | <a href="https://arxiv.org/abs/2503.06515" style="color: #00d2ff;">arXiv:2503.06515</a></p>
+        </div>
+
+        <div class="content">
+            <!-- Motivation -->
+            <div class="section motivation">
+                <h2><span class="icon">❓</span> Motivation - 为什么要做这个？</h2>
+
+                <div class="problem-box">
+                    <h4>🎯 核心问题</h4>
+                    <p>Segment Anything Model (SAM) 性能强大，但<strong>模型太大、计算太贵</strong>，难以在边缘设备部署。后训练量化 (PTQ) 是理想的压缩方案，但<strong>直接套用现有 PTQ 方法效果很差</strong>。</p>
+                </div>
+
+                <div class="problem-box">
+                    <h4>⚠️ 三大挑战</h4>
+                    <ul>
+                        <li><strong>极端激活异常值</strong> — SAM 的注意力机制中存在极端的激活异常值，传统量化器难以处理</li>
+                        <li><strong>语义信息丢失</strong> — 传统 PTQ 只关注"数值误差最小"，忽略了"语义一致性"</li>
+                        <li><strong>跨模态交互受损</strong> — SAM 的核心是图像 - 提示交互，量化破坏了这种交互的语义对齐</li>
+                    </ul>
+                </div>
+
+                <div class="comparison">
+                    <div class="before">
+                        <h4>❌ 传统 PTQ 思路</h4>
+                        <p>最小化数值重建误差 (MSE)<br>→ 量化后数值接近<br>→ <strong>但分割性能大幅下降</strong></p>
+                    </div>
+                    <div class="after">
+                        <h4>✅ SAQ-SAM 思路</h4>
+                        <p>最小化语义一致性损失<br>→ 量化后注意力模式一致<br>→ <strong>分割性能有效保持</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insight -->
+            <div class="section insight">
+                <h2><span class="icon">💡</span> Insight - 关键洞察是什么？</h2>
+
+                <p>作者通过深入分析发现了几个<strong>反直觉的现象</strong>：</p>
+
+                <div class="insight-card">
+                    <div class="card">
+                        <h4>🎯 洞察 1：语义对齐 &gt; 数值精度</h4>
+                        <p>即使量化数值误差较大，只要<strong>注意力焦点区域一致</strong>，分割性能就能保持。数值精度 ≠ 语义能力。</p>
+                    </div>
+
+                    <div class="card">
+                        <h4>👁️ 洞察 2：注意力 IoU 是好的代理指标</h4>
+                        <p>量化前后注意力图的 IoU（重叠度）与最终分割性能<strong>高度相关</strong>，可作为量化优化的目标。</p>
+                    </div>
+
+                    <div class="card">
+                        <h4>🔄 洞察 3：图像 - 提示交互需要双向保护</h4>
+                        <p>Mask Decoder 中的 Cross-Attention 交互模式需要同时考虑<strong>分布对齐</strong>和<strong>语义对齐</strong>。</p>
+                    </div>
+
+                    <div class="card">
+                        <h4>📈 洞察 4：异常值是信号不是噪声</h4>
+                        <p>极端激活异常值通常对应<strong>重要语义信息</strong>，应用来指导裁剪而非抑制。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solution -->
+            <div class="section solution">
+                <h2><span class="icon">🛠️</span> Solution - 怎么解决的？</h2>
+
+                <div class="solution-item">
+                    <h3>
+                        <span style="background: #e8f8f0; padding: 5px 12px; border-radius: 8px;">1️⃣</span>
+                        PCC - 感知一致性裁剪
+                        <span class="tag">针对激活异常值</span>
+                    </h3>
+                    <p><strong>核心思想：</strong> 用注意力 IoU 损失指导裁剪范围搜索，而不是传统的基于统计的方法。</p>
+
+                    <div class="formula">
+                        <strong>步骤：</strong><br>
+                        1. 获取 FP 模型的注意力图 ATM_FP<br>
+                        2. 对不同的裁剪百分比 pct ∈ [0.85, 0.9999]<br>
+                        3. 计算量化注意力图 ATM_Quant(pct)<br>
+                        4. 选择使 IoU(ATM_FP, ATM_Quant) 最大的 pct<br><br>
+                        <strong>损失函数：</strong> AttentionOverlapLoss = 1 - IoU(高注意力区域)
+                    </div>
+
+                    <p><strong>效果：</strong> 仅 PCC 就能在 W6A6 下带来显著提升，对 SAM-B 效果最明显。</p>
+                </div>
+
+                <div class="solution-item">
+                    <h3>
+                        <span style="background: #e8f8f0; padding: 5px 12px; border-radius: 8px;">2️⃣</span>
+                        PAR - 提示感知重建
+                        <span class="tag">针对跨模态交互</span>
+                    </h3>
+                    <p><strong>核心思想：</strong> 在 Encoder 量化重建时，不仅重建 Encoder 输出，还要重建 Mask Decoder 中的 Cross-Attention 交互响应。</p>
+
+                    <div class="formula">
+                        <strong>重建流程：</strong><br>
+                        1. 量化 Encoder → 输出 Image Token<br>
+                        2. Image Token + Prompt → 通过 Mask Decoder Cross-Attention<br>
+                        3. 获取交互后的 Cross Image Token (CIT)<br>
+                        4. 计算损失：L = β·L_rec + α·L_PAR<br>
+                           - L_rec: Encoder 输出重建 MSE<br>
+                           - L_PAR: CIT 的交互相似性损失<br><br>
+                        <strong>关键：</strong> L_PAR 保护了图像 - 提示交互的语义一致性
+                    </div>
+                </div>
+
+                <div class="solution-item">
+                    <h3>
+                        <span style="background: #e8f8f0; padding: 5px 12px; border-radius: 8px;">3️⃣</span>
+                        特殊量化器设计
+                        <span class="tag">针对架构特性</span>
+                    </h3>
+
+                    <ul style="margin-left: 20px; margin-top: 15px;">
+                        <li style="margin-bottom: 15px;">
+                            <strong>针对 Softmax 输出 → 自适应粒度量化 (AGQ)</strong>
+                            <ul>
+                                <li>使用 AdaptiveGranularityQuantize + LogAvgMSEFastObserver</li>
+                                <li>更好地处理注意力概率分布</li>
+                            </ul>
+                        </li>
+                        <li style="margin-bottom: 15px;">
+                            <strong>针对 K 激活双峰分布 → 符号感知量化</strong>
+                            <ul>
+                                <li>使用 LSQSignFakeQuantize + SignAvgMSEFastObserver</li>
+                                <li>检测双峰分布并调整权重符号 (BIG: Bimodal Integration)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="solution-item">
+                    <h3>
+                        <span style="background: #e8f8f0; padding: 5px 12px; border-radius: 8px;">4️⃣</span>
+                        分层重建策略
+                        <span class="tag">工程实现</span>
+                    </h3>
+                    <p>将模型分为多个重建单元（per_block / per_layer / per_stage），逐层进行重建优化：</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Encoder 重建 (CAMS)</strong>：使用 PAR 损失，逐 stage 优化</li>
+                        <li><strong>Decoder 重建 (CLM)</strong>：类似策略，保护 Cross-Attention 交互</li>
+                        <li><strong>重建后融合</strong>：将优化后的量化参数固定，得到最终模型</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Key Takeaway -->
+            <div class="key-takeaway">
+                <h3>🎯 Key Takeaway - 核心要点总结</h3>
+                <ul>
+                    <li><strong>范式转变：</strong> 从"数值精度优先"转向"语义对齐优先"</li>
+                    <li><strong>核心创新：</strong> PCC（注意力 IoU 指导裁剪）+ PAR（跨模态交互保护）</li>
+                    <li><strong>实验效果：</strong> SAM-B W6A6 量化下，比基线提升 <span class="highlight">+11.7% mAP</span></li>
+                    <li><strong>可迁移性：</strong> 注意力 IoU 损失、交互感知重建可应用于其他 Vision Transformer 和多模态模型</li>
+                    <li><strong>量化配置：</strong> 权重 per-channel + 激活 per-tensor，W4A4/W6A6/W8A8 可选</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>📄 论文：<a href="https://arxiv.org/abs/2503.06515" target="_blank">SAQ-SAM: Semantically-Aligned Quantization for Segment Anything Model</a></p>
+            <p>💻 代码：<a href="https://github.com/SAQ-SAM/SAQ-SAM" target="_blank">GitHub Repository</a></p>
+            <p style="margin-top: 15px; color: #4a5568;">分享文档生成时间：2026-03-25</p>
+        </div>
+    </div>
+</body>
+</html>

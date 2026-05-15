@@ -1,0 +1,89 @@
+============================================================
+LLM 权重与激活分布分析报告
+============================================================
+
+
+## Llama-3.1-8B
+
+### 1. 整体统计
+**WEIGHT**:
+- Kurtosis: mean=1.38, median=1.00
+- Outlier Ratio: mean=0.58%
+
+**ACTIVATION**:
+- Kurtosis: mean=10738.95, median=21.18
+- Outlier Ratio: mean=1.16%
+
+### 2. 长尾检验
+- weight: 5.8% 模块 kurtosis>3
+- activation: 91.1% 模块 kurtosis>3
+
+### 3. 模块对比
+      kind    module  count  kurtosis_mean  kurtosis_std  outlier_mean  abs_max_mean
+    weight    q_proj     32       1.995038      2.864312      0.008817      0.299103
+    weight    k_proj     32       2.199537      2.568463      0.008842      0.375244
+    weight    v_proj     32       0.697822      0.429479      0.005879      0.123276
+    weight    o_proj     32       2.441392      1.880114      0.004905      0.436340
+    weight gate_proj     32       0.986308      0.430451      0.005551      0.458496
+    weight   up_proj     32       0.259928      0.220157      0.003379      0.321716
+    weight down_proj     32       1.072737      0.646671      0.003539      0.672363
+activation    q_proj     32      33.671975     37.266190      0.012312     12.471802
+activation    k_proj     32      33.671975     37.266190      0.012312     12.471802
+activation    v_proj     32      33.671975     37.266190      0.012312     12.471802
+activation    o_proj     32      35.592577     25.635924      0.018833      2.333351
+activation gate_proj     32       7.246433      4.486616      0.006667      8.953979
+activation   up_proj     32       7.246433      4.486616      0.006667      8.953979
+activation down_proj     32   75021.550855 350395.500839      0.012208     29.007507
+
+## Qwen2.5-7B
+
+### 1. 整体统计
+**WEIGHT**:
+- Kurtosis: mean=2.48, median=1.45
+- Outlier Ratio: mean=0.68%
+
+**ACTIVATION**:
+- Kurtosis: mean=8848.90, median=51.18
+- Outlier Ratio: mean=1.20%
+
+### 2. 长尾检验
+- weight: 15.3% 模块 kurtosis>3
+- activation: 100.0% 模块 kurtosis>3
+
+### 3. 模块对比
+      kind    module  count  kurtosis_mean  kurtosis_std  outlier_mean  abs_max_mean
+    weight    q_proj     28       2.003422      1.285687      0.008681      0.324079
+    weight    k_proj     28       2.460456      0.917391      0.010439      0.245257
+    weight    v_proj     28       1.154120      0.911028      0.007131      0.163871
+    weight    o_proj     28       3.208239      2.217748      0.006614      0.526297
+    weight gate_proj     28       5.534248     24.009332      0.004994      0.566057
+    weight   up_proj     28       0.762747      0.575423      0.004878      0.546038
+    weight down_proj     28       2.257411      2.584988      0.005027      0.749860
+activation    q_proj     28      72.342623     80.449616      0.014078     29.590402
+activation    k_proj     28      72.342623     80.449616      0.014078     29.590402
+activation    v_proj     28      72.342623     80.449616      0.014078     29.590402
+activation    o_proj     28      32.160376     79.726067      0.018980      9.184431
+activation gate_proj     28     194.741740    310.612365      0.006271     48.656529
+activation   up_proj     28     194.741740    310.612365      0.006271     48.656529
+activation down_proj     28   61303.658374 203184.632936      0.010017    393.696987
+
+============================================================
+跨模型对比
+============================================================
+       model       kind        metric         mean    median           std      min          max           p99
+Llama-3.1-8B     weight      kurtosis     1.378966  1.000344      1.805588 0.075055 1.731747e+01      8.670739
+Llama-3.1-8B     weight outlier_ratio     0.005845  0.005259      0.002647 0.002888 2.033126e-02      0.014246
+Llama-3.1-8B     weight       abs_max     0.383791  0.358398      0.188765 0.058594 9.140625e-01      0.828125
+Llama-3.1-8B     weight           std     0.015021  0.012767      0.005360 0.007225 2.801509e-02      0.027821
+Llama-3.1-8B activation      kurtosis 10738.950318 21.175219 133264.600201 1.773752 1.949213e+06   7543.303458
+Llama-3.1-8B activation outlier_ratio     0.011616  0.011302      0.004755 0.000003 2.734400e-02      0.023413
+Llama-3.1-8B activation       abs_max    12.380603  9.632812     32.669742 0.358154 4.757500e+02     26.107500
+Llama-3.1-8B activation           std     0.302079  0.350614      0.173471 0.008914 5.217840e-01      0.513641
+  Qwen2.5-7B     weight      kurtosis     2.482949  1.450668      9.168399 0.209499 1.280062e+02     12.815721
+  Qwen2.5-7B     weight outlier_ratio     0.006823  0.006410      0.002607 0.003438 1.509748e-02      0.013726
+  Qwen2.5-7B     weight       abs_max     0.445923  0.411133      0.232540 0.077148 1.156250e+00      1.017578
+  Qwen2.5-7B     weight           std     0.016899  0.016588      0.002527 0.008999 2.995179e-02      0.027092
+  Qwen2.5-7B activation      kurtosis  8848.904300 51.178354  78595.257722 6.164673 1.021183e+06 174496.052344
+  Qwen2.5-7B activation outlier_ratio     0.011968  0.011895      0.005273 0.000430 2.495600e-02      0.022605
+  Qwen2.5-7B activation       abs_max    84.137954 26.968750    475.009762 1.568359 6.516000e+03    678.300000
+  Qwen2.5-7B activation           std     0.688982  0.616720      0.506196 0.052801 3.824276e+00      2.224410
